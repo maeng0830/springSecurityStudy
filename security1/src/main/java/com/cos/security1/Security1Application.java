@@ -1,6 +1,5 @@
 package com.cos.security1;
 
-import com.cos.security1.repository.UserRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -15,4 +14,8 @@ public class Security1Application {
 		SpringApplication.run(Security1Application.class, args);
 	}
 
+	@Bean
+	public BCryptPasswordEncoder encodePwd() {
+		return new BCryptPasswordEncoder();
+	}
 }

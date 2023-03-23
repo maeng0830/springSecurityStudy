@@ -1,4 +1,4 @@
-package com.cos.security1.auth;
+package com.cos.security1.config.auth;
 
 import com.cos.security1.model.User;
 import com.cos.security1.repository.UserRepository;
@@ -23,6 +23,7 @@ public class PrincipalDetailsService implements UserDetailsService {
 	// 리턴된 UserDetails 객체는 Authentication 객체 내부에 저장된다.
 	// Authentication(내부 UserDetails)는 시큐리티 세션에 저장된다.
 	// 시큐리티 세션(SecurityContextHolder:Authentication(내부 UserDetails))
+	// 메소드 종료 시 @AuthenticationPrincipal 어노테이션이 생성된다.
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Optional<User> optionalUser = userRepository.findByUsername(username);

@@ -1,10 +1,14 @@
-package com.cos.security1.auth;
+package com.cos.security1.config.auth;
 
 import com.cos.security1.model.User;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
+import lombok.Getter;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 /**
  * 시큐리티가 '/login' 주소 요청을 낚아채서 로그인을 진행한다.
@@ -12,12 +16,22 @@ import org.springframework.security.core.userdetails.UserDetails;
  * Authentication 내부에 user 정보(UserDetails 객체)가 있어야 한다.
  * UserDetails는 인터페이스이기 때문에 구현체(PrincipalDetails)가 필요하다.
  */
-public class PrincipalDetails implements UserDetails {
+@Getter
+@ToString
+public class PrincipalDetails implements UserDetails, OAuth2User {
 
 	private User user;
+	private Map<String, Object> attributes;
 
+	// 일반 로그인
 	public PrincipalDetails(User user) {
 		this.user = user;
+	}
+
+	// OAuth2 로그인
+	public PrincipalDetails(User user, Map<String, Object> attributes) {
+		this.user = user;
+		this.attributes = attributes;
 	}
 
 	// 해당 user의 권한(user.getRole())을 리턴
@@ -67,5 +81,15 @@ public class PrincipalDetails implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	@Override
+	public Map<String, Object> getAttributes() {
+		return attributes;
+	}
+
+	@Override
+	public String getName() {
+		return String.valueOf(attributes.get("sub"));
 	}
 }
